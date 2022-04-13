@@ -1,0 +1,41 @@
+{
+  "name": "face-nft",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "nuxt:dev": "nuxt client",
+    "nuxt:build": "nuxt build client",
+    "nuxt:start": "nuxt start client",
+    "nuxt:generate": "nuxt generate client",
+    "lint:prettier": "prettier --check .",
+    "lint": "npm run lint:prettier",
+    "lintfix": "prettier --write --list-different ."
+  },
+  "dependencies": {
+    "@metamask/onboarding": "^1.0.1",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/toast": "^3.3.1",
+    "core-js": "^3.19.3",
+    "dotenv": "^16.0.0",
+    "nuxt": "^2.15.8",
+    "nuxt-clipboard": "0.0.7",
+    "uuid": "^8.3.2",
+    "vue": "^2.6.14",
+    "vue-server-renderer": "^2.6.14",
+    "vue-template-compiler": "^2.6.14",
+    "vuetify": "^2.6.1",
+    "webpack": "^4.46.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@nuxtjs/vuetify": "^1.12.3",
+    "@openzeppelin/contracts": "^4.5.0",
+    "chai": "^4.3.6",
+    "eslint-config-prettier": "^8.3.0",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.2",
+    "hardhat": "^2.9.3",
+    "prettier": "^2.5.1"
+  }
+}
