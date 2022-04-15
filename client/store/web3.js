@@ -55,7 +55,7 @@ export const actions = {
   async getTotalMinted({ commit }) {
     commit('updateTotalMinted', 0)
 
-    const totalMinted = await this.$web3.contract().count()
+    const totalMinted = await this.$web3.contract().totalSupply()
 
     commit('updateTotalMinted', parseInt(totalMinted))
   },

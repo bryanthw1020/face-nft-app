@@ -10,7 +10,9 @@
 
     <v-card-title>Face #{{ tokenId }}</v-card-title>
 
-    <v-card-actions>
+    <v-divider />
+
+    <v-card-actions class="bg-white">
       <v-btn
         color="secondary"
         :disabled="isMinted"
@@ -21,14 +23,14 @@
         <template v-if="isMinted"> Taken </template>
         <template v-else> Mint </template>
       </v-btn>
-      <v-btn
-        color="info"
-        block
-        v-else-if="isMinted && isOwner"
-        @click="showURI"
-      >
-        Show URI
-      </v-btn>
+
+      <template v-else-if="isMinted && isOwner">
+        <v-spacer />
+        <v-btn icon @click="showURI">
+          <v-icon>mdi-eye</v-icon>
+        </v-btn>
+        <burn-token-button :burn="burn" :token-id="tokenId" />
+      </template>
     </v-card-actions>
   </v-card>
 </template>
@@ -105,7 +107,7 @@ export default {
       try {
         const contract = this.$web3.contract()
         const address = await contract.signer.getAddress()
-        const result = await contract.payToMint(address, this.metadataURI, {
+        const result = await contract.safeMint(address, this.metadataURI, {
           value: ethers.utils.parseEther(this.mintCost),
         })
 
@@ -119,6 +121,30 @@ export default {
         }
 
         this.$toast.error('Error minting. Please try again later.', {
+          icon: 'mdi-alert-outline',
+        })
+      }
+    },
+    async burn() {
+      if (!this.isMinted || !this.isOwner) {
+        return
+      }
+
+      console.log('HELLO')
+      try {
+        const contract = this.$web3.contract()
+        const result = await contract.burn(this.tokenId)
+
+        await result.wait()
+        this.$store.dispatch('web3/getTotalMinted')
+      } catch (error) {
+        const { code } = error
+
+        if (code && code == 4001) {
+          return
+        }
+
+        this.$toast.error('Error burning token. Please try again later.', {
           icon: 'mdi-alert-outline',
         })
       }
