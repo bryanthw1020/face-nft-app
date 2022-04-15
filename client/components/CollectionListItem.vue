@@ -80,11 +80,15 @@ export default {
       }
     },
     async getMintedStatus() {
-      this.isMinted = await this.$web3
-        .contract()
-        .isContentOwned(this.metadataURI)
+      try {
+        this.isMinted = await this.$web3
+          .contract()
+          .isContentOwned(this.metadataURI)
 
-      await this._getOwner()
+        await this._getOwner()
+      } catch (error) {
+        console.error(`Token ID: ${this.tokenId}`, error)
+      }
     },
     async _getOwner() {
       if (!this.isMinted) {
@@ -130,7 +134,6 @@ export default {
         return
       }
 
-      console.log('HELLO')
       try {
         const contract = this.$web3.contract()
         const result = await contract.burn(this.tokenId)

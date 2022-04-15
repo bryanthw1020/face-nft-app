@@ -7,9 +7,9 @@
 
     <div class="px-4 py-6 text-center">
       <v-row>
-        <v-col cols="12" sm="3" v-for="(id, index) in totalItems" :key="id">
+        <v-col cols="12" sm="3" v-for="item in items" :key="item.id">
           <collection-list-item
-            :token-id="index"
+            :token-id="item.tokenId"
             :mint-cost="currentMintCost"
           />
         </v-col>
@@ -20,7 +20,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { v4 as uuid } from 'uuid'
 
 export default {
   name: 'CollectionList',
@@ -32,12 +31,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('web3', ['totalMinted', 'account', 'currentMintCost']),
-    totalItems() {
-      return Array(this.totalMinted + 1)
-        .fill(0)
-        .map(() => uuid())
-    },
+    ...mapState('web3', ['account', 'currentMintCost', 'items']),
   },
 }
 </script>

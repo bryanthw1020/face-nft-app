@@ -1,4 +1,5 @@
 import MetaMaskOnboarding from '@metamask/onboarding'
+import { v4 as uuid } from 'uuid'
 
 export const state = () => ({
   metaMaskOnboarding: null,
@@ -9,6 +10,7 @@ export const state = () => ({
   totalMinted: 0,
   currentMintCost: 0,
   isContractOwner: false,
+  items: [],
 })
 
 export const mutations = {
@@ -36,6 +38,9 @@ export const mutations = {
   updateIsContractOWner(state, status) {
     state.isContractOwner = status
   },
+  updateItems(state, items) {
+    state.items = items
+  },
 }
 
 export const actions = {
@@ -52,12 +57,32 @@ export const actions = {
       commit('setMetaMaskOnboarding', null)
     }
   },
-  async getTotalMinted({ commit }) {
+  async getTotalMinted({ commit, dispatch }) {
     commit('updateTotalMinted', 0)
 
     const totalMinted = await this.$web3.contract().totalSupply()
 
     commit('updateTotalMinted', parseInt(totalMinted))
+
+    await dispatch('getTotalItems')
+  },
+  async getTotalItems({ commit, state }) {
+    let items = await Promise.all(
+      Array(state.totalMinted + 1)
+        .fill(0)
+        .map(async (_, tokenId) => {
+          return {
+            id: uuid(),
+            tokenId,
+            isBurned: await this.$web3.contract().isTokenDeleted(tokenId),
+          }
+        })
+    )
+
+    commit(
+      'updateItems',
+      items.filter((item) => !item.isBurned)
+    )
   },
   async getIsContractOwner({ commit, state }) {
     const ownerAccount = await this.$web3.contract().owner()
