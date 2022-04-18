@@ -7,6 +7,7 @@
     "nuxt:build": "nuxt build client",
     "nuxt:start": "nuxt start client",
     "nuxt:generate": "nuxt generate client",
+    "hardhat:compile": "hardhat compile",
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:prettier",
     "lintfix": "prettier --write --list-different ."
